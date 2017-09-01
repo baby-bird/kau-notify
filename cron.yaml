@@ -1,0 +1,13 @@
+cron:
+- description: Send email notification
+  url: /sendemail
+  schedule: every day 21:00
+  timezone: Asia/Seoul
+
+- description: User information for today
+  url: /userinfo
+  schedule: every day 20:59
+  timezone: Asia/Seoul
+  retry_parameters:
+    job_retry_limit: 1
+    min_backoff_seconds: 1200

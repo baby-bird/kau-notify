@@ -1,0 +1,15 @@
+blacklist:
+- subnet: 35.184.88.154
+  description: A single IPv4 address
+- subnet: 130.211.176.147
+  description: A single IPv4 address
+- subnet: 35.184.169.250
+  description: A single IPv4 address
+- subnet: 35.184.55.20
+  description: A single IPv4 address
+- subnet: 35.184.165.38
+  description: A single IPv4 address
+- subnet: 35.184.150.98
+  description: A single IPv4 address
+- subnet: 107.178.219.97
+  description: A single IPv4 address

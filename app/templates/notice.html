@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+  <head>
+  {% include 'header.html' %}
+  <link href="/static/notice-style.css" rel="stylesheet" />
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+
+    <!-- Modal -->
+  <div class="container content center_div">
+        <form name ="contact" action="/notice_email/send" method="POST" role="form" class='form-horizontal'>
+          <div class="form-group row">
+            <div class="col-md-8 col-md-offset-2">
+              <h1>구독자 모두에게 공지 이메일 보내기</h1>
+              <textarea name="notice_content" rows="10" placeholder="이메일 작성"  class="form-control margin-bottom"></textarea>
+              <div class="g-recaptcha col-md-13 col-md-offset-3 margin-bottom" data-sitekey="6LefLRcUAAAAAFM_osCYRN7ePc3nwDNSmyLkaf6L"></div>
+                <button type="submit" id="register_submit" class="btn btn-lg btn-primary btn-block">이메일 보내기 | <span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
+            </div>
+            </div>
+          </form>
+        </div>
+          <div class="container">
+               <div class="row">
+                <div class="span12">
+                 <div id="footer">
+
+                   <p class="pull-right"><a href="#">Back to top</a></p>
+                   <p class="text-muted" style="text-align: left">© Copyright Since 2016 kaunotifier All Rights reserved.</p>
+
+
+                 </div>
+              </div>
+           </div>
+          </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="static/js/bootstrap.min.js"></script>
+  </body>
+</html>

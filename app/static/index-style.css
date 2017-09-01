@@ -1,0 +1,67 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+* {
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+body {
+    font-family: 'Nanum Gothic', serif;
+    padding-top: 55px;
+}
+input[name="email"]:focus,
+select[name="dept"]:focus {
+  border-color: red;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(239, 104, 126, 0.6);
+  outline: 0 none;
+}
+
+h1, h2, h3, h4, h5 {
+	text-rendering: inherit !important;
+	font-weight: bold;
+}
+h1 {
+	font-size:30px !important;
+	font-weight: bold;
+	padding-bottom: 20px
+}
+
+.content {
+	/*padding-top:10px !important;*/
+	text-align: center
+}
+
+.lead {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.4;
+}
+
+.center_div{
+    margin: 0 auto;
+    width:95% /* value of your choice which suits your alignment */
+}
+
+.margin-bottom {
+margin-bottom:10px;
+}
+.margin-top {
+margin-top:0px;
+}
+
+
+ul {
+	margin-top:15px;
+	display: inline-block;
+  text-align:left;
+}
+
+.info{
+	padding:10px;
+}
+.list{
+	font-size:0.8em;
+}
+.time{
+	font-size:0.8em;
+}

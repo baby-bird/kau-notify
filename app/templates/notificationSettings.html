@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+  <head>
+    {% include 'header.html' %}
+    <link href="/static/noti-style.css" rel="stylesheet" />
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><!-- was src="static/js/bootstrap.min.js" -->
+    <script>
+    function validateForm() {
+      var deptcheckboxs=document.getElementsByName("dept_board");
+      var gencheckboxs=document.getElementsByName("gen_board");
+      var okay=false;
+        for(var i=0,l1=deptcheckboxs.length,l2=gencheckboxs.length;i<l1&&i<l2;i++)
+        {
+            if(deptcheckboxs[i].checked||gencheckboxs[i].checked)
+            {
+                okay=true;
+                break;
+            }
+        }
+        if(okay) {
+          return true;
+        }
+        else {
+          alert("적어도 한개의 게시판을 선택하세요.");
+          return false;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+
+    <!-- Modal -->
+    <div class="container content center_div">
+      <div class="col-md-8 col-md-offset-2">
+  <form name ="contact" action="/notificationSettings/{{token}}/set" onsubmit="return validateForm()" method="POST" role="form" class='form-horizontal'>
+      <h1>알림 게시판 설정</h1>
+      <h2>사용자 정보</h2>
+      {% if email %}
+      <p class="alert alert-info margin-bottom">
+        <b>이메일: {{ email }}</b><br>
+        <b>나의 알림 게시판:
+          {% if subsboard %}
+            {% if dept %}
+              {% for board in subsboard %}
+              {{board}},
+              {% endfor %}
+              {% for deptboard in dept %}
+                {% if deptboard==dept[dept|length-1] %}
+                  {{deptboard}} 공지
+                {% else %}
+                  {{deptboard}},
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              {% for board in subsboard %}
+                {% if board==subsboard[subsboard|length-1] %}
+                  {{board}} 공지
+                {% else %}
+                  {{board}},
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% else %}
+            {% for deptboard in dept %}
+              {% if deptboard==dept[dept|length-1] %}
+                {{deptboard}} 공지
+              {% else %}
+                {{deptboard}},
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+      </b>
+        {% endif %}
+      </p>
+      <h2>KAU 공지 설정</h2>
+          <p class="lead">알림을 원하는 KAU 공지 게시판을 선택하세요.</p>
+          <div class="btn-group" data-toggle="buttons">
+              <!--<label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="일반" checked>일반
+              </label>
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="학사" checked>학사
+              </label>-->
+              {% if '일반' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="General" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="General">{% endif %}
+                  일반
+              </label>
+              {% if '학사' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Academic" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Academic">{% endif %}
+                  학사
+              </label>
+              {% if '장학/대출' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Scholar" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Scholar">{% endif %}
+                  장학/대출
+              </label>
+              {% if '취업' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Career" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Career">{% endif %}
+                  취업
+              </label>
+              {% if '행사' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Event" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Event">{% endif %}
+                  행사
+              </label>
+              {% if '모집/채용' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Employ" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Employ">{% endif %}
+                  모집/채용
+              </label>
+              {% if '생활관' in subsboard %}
+              <label class="btn btn-default active">
+                  <input type="checkbox" name="gen_board" value="Dormitory" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" name="gen_board" value="Dormitory">{% endif %}
+                  생활관
+              </label>
+          </div>
+      <h2>학부 공지 설정</h2>
+      <p class="lead">알림을 원하는 학부 공지 게시판을 선택하세요.(최대 2개)</p>
+      <div class="btn-group needspace" data-toggle="buttons">
+        {% if '항공우주 및 기계공학부' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="AME" checked="">
+              {% else %}
+              <label class="btn btn-default">
+                  <input type="checkbox" class="board_check" name="dept_board" value="AME">{% endif %}
+              항공우주 및 기계공학부
+          </label>
+          {% if '항공전자정보공학부' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="ETC" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="ETC">{% endif %}
+              항공전자정보공학부
+          </label>
+          {% if '소프트웨어학과' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="SOF" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="SOF">{% endif %}
+              소프트웨어학과
+          </label>
+          {% if '항공재료공학과' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="AVS" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="AVS">{% endif %}
+              항공재료공학과
+          </label>
+          {% if '항공교통물류학부' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="ATL" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="ATL">{% endif %}
+              항공교통물류학부
+          </label>
+          {% if '항공운항학과' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="AEO" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="AEO">{% endif %}
+              항공운항학과
+          </label>
+          {% if '경영학부' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="BUS" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="BUS">{% endif %}
+              경영학부
+          </label>
+      </div>
+      <button type="submit" id="register_submit" class="btn btn-lg btn-primary btn-block needspace">저장 | <span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
+</form>
+</div>
+</div>
+<div class="container content center_div">
+  <div class="col-md-8 col-md-offset-2 needspace">
+<a href="{{unsuburl}}" class="btn btn-lg btn-danger btn-block" role="button">구독 취소 | <span class="glyphicon glyphicon-export" aria-hidden="true"></span></a>
+</div>
+</div>
+<div class="container">
+     <div class="row">
+      <div class="span12">
+         <p class="pull-right"><a href="#">Back to top</a></p>
+         <p class="text-muted" style="text-align: left">© Copyright Since 2016 kaunotifier All Rights reserved.</p>
+    </div>
+ </div>
+</div>
+<script>
+var limit=2;
+$('input.board_check').on('change', function (evt) {
+    if ($('input.board_check:checked').length > limit) {
+    alert("학부 게시판은 2개까지 가능합니다.");
+    $(this).prop('checked', false).checkboxradio('refresh');
+    }
+});
+</script>
+</body>
+</html>

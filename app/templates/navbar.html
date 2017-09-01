@@ -1,0 +1,53 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.7&appId=290629841317791";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><b>한국항공대 공지 알리미</b></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav pull-right" style="text-align: right">
+        <li><a class="fb-like" data-href="https://www.facebook.com/kaunotifier/" data-width="100" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></a></li>
+        <li><a class="fb-share-button" data-href="https://kau-notify.appspot.com/" data-layout="button_count" data-size="small" data-mobile-iframe="true"></a></li>
+        <li><a href="/telegram">텔레그램 공지봇</a></li>
+        <li><a id="kakao-link-btn" href="javascript:;">카카오톡으로 공유</a></li>
+        <li><a href="/developer">개발자</a></li>
+        <script type='text/javascript'>
+          //<![CDATA[
+            // // 사용할 앱의 JavaScript 키를 설정해 주세요.
+            Kakao.init('55249cc0196c444f058b5a84a4ba02d5');
+            // // 카카오톡 링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+            Kakao.Link.createTalkLinkButton({
+              container: '#kakao-link-btn',
+              label: '한국항공대학교 공지사항 새 글을 매일 오후 9시에 알려드립니다.',
+              image: {
+                src: 'https://kau-notify.appspot.com/static/logo.gif',
+                width: '450',
+                height: '400'
+              },
+              webButton: {
+                text: '신청하러 가기',
+                url: 'https://kau-notify.appspot.com/' // 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
+              }
+            });
+          //]]>
+        </script>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

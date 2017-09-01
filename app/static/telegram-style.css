@@ -1,0 +1,21 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+* {
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+body {
+    font-family: 'Nanum Gothic', serif;
+    padding-top: 55px;
+}
+.content {
+	/*padding-top:10px !important;*/
+	text-align: center
+}
+.center_div{
+    margin: 0 auto;
+    width:95% /* value of your choice which suits your alignment */
+}
+.margin-bottom {
+margin-bottom:10px;
+}

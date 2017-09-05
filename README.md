@@ -6,6 +6,7 @@
 * google-app-engine
 * flask
 * beautifulsoup
+* Sendgrid
 # License
 MIT License. For more information, see LICENSE.
 

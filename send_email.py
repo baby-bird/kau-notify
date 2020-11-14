@@ -11,13 +11,17 @@ import logging, requests_toolbelt.adapters.appengine, lxml
 from app.models import *
 from app.config import *
 from google.appengine.api import mail
-import pytz, time
+import pytz, time, json
 import sendgrid
 from app.config import *
 from sendgrid.helpers.mail import *
 from google.appengine.api import urlfetch
 
 urlfetch.set_default_fetch_deadline(60)
+
+main_board_id = 1
+dept_board_id = 2
+career_board_id = 3
 
 BoardDict = {"General": "일반", \
              "Academic": "학사", \
@@ -32,7 +36,8 @@ BoardDict = {"General": "일반", \
              "SOF": "소프트웨어학과", \
              "ATL": "항공교통물류학부", \
              "BUS": "경영학부", \
-             "AEO": "항공운항학과"}
+             "AEO": "항공운항학과", \
+             "FRM": "자유전공학부"}
 
 home_url = "http://kau.ac.kr/page/kauspace"
 search_url = "?search_boardId="
@@ -47,7 +52,7 @@ eve = "Event"
 emp = "Employ"
 dor = "Dormitory"
 
-HomeList = [gen, aca, sch, job, eve, emp, dor]
+HomeLst_txt = [gen, aca, sch, job, eve, emp, dor]
 
 # 일반공지
 gen_notice_board = home_url + "/general_list.jsp"
@@ -61,9 +66,9 @@ aca_notice_link = aca_notice_board + search_url
 sch_notice_board = home_url + "/scholarship_list.jsp"
 sch_notice_link = sch_notice_board + search_url
 
-# 취업공지
-job_notice_board = "http://kau.ac.kr/page/kau_media/career_list.jsp"
-job_notice_link = job_notice_board + search_url
+# 대학일자리센터 공지사항
+job_notice_board = "http://career.kau.ac.kr/ko/community/notice2"
+job_notice_link = job_notice_board + "/view/"
 
 # 행사공지
 eve_notice_board = home_url + "/event_list.jsp"
@@ -77,16 +82,72 @@ emp_notice_link = emp_notice_board + search_url
 dor_notice_board = base_url + "/web/life/community/notice_li.jsp"
 dor_notice_link = dor_notice_board + search_url
 
-# 대문 공지록과 각 공지 주소 연동하는 Dict 생성
-HomeDict = {gen: [gen_notice_board, gen_notice_link], \
-            aca: [aca_notice_board, aca_notice_link], \
-            sch: [sch_notice_board, sch_notice_link], \
-            job: [job_notice_board, job_notice_link], \
-            eve: [eve_notice_board, eve_notice_link], \
-            emp: [emp_notice_board, emp_notice_link], \
-            dor: [dor_notice_board, dor_notice_link]}
+class Home:
+  def __init__(self, board_url, notice_link, main_board_id):
+    self.board_url = board_url
+    self.notice_link = notice_link
+    self.board_id = main_board_id
 
-# 학부 공지 할당
+# 대문 공지록과 각 공지 주소 연동하는 Instance 생성
+gen = Home(gen_notice_board, gen_notice_link, main_board_id)
+aca = Home(aca_notice_board, aca_notice_link, main_board_id)
+sch = Home(sch_notice_board, sch_notice_link, main_board_id)
+job = Home(job_notice_board, job_notice_link, career_board_id)
+eve = Home(eve_notice_board, eve_notice_link, main_board_id)
+emp = Home(emp_notice_board, emp_notice_link, main_board_id)
+dor = Home(dor_notice_board, dor_notice_link, main_board_id)
+
+HomeLst = [gen, aca, sch, job, eve, emp, dor]
+
+
+base_url = "http://college.kau.ac.kr/web/pages"
+
+# 항우기
+ame_notice_board = base_url + "/gc1986b.do"
+ame_notice_link = ame_notice_board + "?siteFlag=am_www&bbsFlag=View&"
+# 항전정
+etc_notice_board = base_url + "/gc23761b.do"
+etc_notice_link = etc_notice_board + "?siteFlag=eie_www&bbsFlag=View&"
+# 소프트웨어학과
+sof_notice_board = base_url + "/gc911b.do"
+sof_notice_link = sof_notice_board + "?siteFlag=sw_www&bbsFlag=View&"
+# 재료공학과
+avs_notice_board = base_url + "/gc46806b.do"
+avs_notice_link = avs_notice_board + "?siteFlag=materials_www&bbsFlag=View&"
+# 항공교통물류학부
+atl_notice_board = base_url + "/gc93464b.do"
+atl_notice_link = atl_notice_board + "?siteFlag=attll_www&bbsFlag=View&"
+# 항공운항학과
+aeo_notice_board = base_url + "/gc61682b.do"
+aeo_notice_link = aeo_notice_board + "?siteFlag=hw_www&bbsFlag=View&"
+# 경영학부
+bus_notice_board = base_url + "/gc25685b.do"
+bus_notice_link = bus_notice_board + "?siteFlag=biz_www&bbsFlag=View&"
+# 자유전공학부
+frm_notice_board = base_url + "/gc46051b.do"
+frm_notice_link = frm_notice_board + "?siteFlag=free_www&bbsFlag=View&"
+
+class Dept:
+  def __init__(self, board_url, notice_link, dept_board_id, bbsId, siteFlag):
+    self.board_url = board_url
+    self.notice_link = notice_link
+    self.board_id = dept_board_id
+    self.bbsId = bbsId
+    self.siteFlag = siteFlag
+
+# 학부목록과 각 학부 웹사이트 연동하는 Instance 생성
+ame = Dept(ame_notice_board, ame_notice_link, dept_board_id, '0024', 'am_www')
+etc = Dept(etc_notice_board, etc_notice_link, dept_board_id, '0015', 'eie_www')
+sof = Dept(sof_notice_board, sof_notice_link, dept_board_id, '0032', 'sw_www')
+avs = Dept(avs_notice_board, avs_notice_link, dept_board_id, '0096', 'materials_www')
+atl = Dept(atl_notice_board, atl_notice_link, dept_board_id, '0048', 'attll_www')
+aeo = Dept(aeo_notice_board, aeo_notice_link, dept_board_id, '0003', 'hw_www')
+bus = Dept(bus_notice_board, bus_notice_link, dept_board_id, '0056', 'biz_www')
+frm = Dept(frm_notice_board, frm_notice_link, dept_board_id, '0072', 'free_www')
+
+DeptLst = [bus, sof, atl, ame, aeo, avs, etc, frm]
+
+# 학부 공지 텍스트 할당
 ame = "AME"
 etc = "ETC"
 avs = "AVS"
@@ -94,41 +155,10 @@ sof = "SOF"
 atl = "ATL"
 bus = "BUS"
 aeo = "AEO"
+frm = "FRM"
 
-deptlst = [bus, sof, atl, ame, aeo, avs, etc]
+DeptLst_txt = [bus, sof, atl, ame, aeo, avs, etc, frm]
 
-base_url = "http://www.kau.ac.kr/page"
-
-# 항우기
-ame_notice_board = base_url + "/web/am_engineer/notice/dept_li.jsp"
-ame_notice_link = ame_notice_board + search_url
-# 항전정
-etc_notice_board = base_url + "/dept/etce1/board/notice_li.jsp"
-etc_notice_link = etc_notice_board + search_url
-# 소프트웨어학과
-sof_notice_board = "http://sw.kau.ac.kr/?page_id=739"
-sof_notice_link = sof_notice_board + "&mod=document&uid="
-# 재료공학과
-avs_notice_board = base_url + "/web/aviation_stuff/notice/dept_li.jsp"
-avs_notice_link = avs_notice_board + search_url
-# 항공교통물류학부
-atl_notice_board = base_url + "/web/universe_law/life/notice_li.jsp"
-atl_notice_link = atl_notice_board + search_url
-# 항공운항학과
-aeo_notice_board = base_url + "/web/aviation_service/information/no_dept_li.jsp"
-aeo_notice_link = aeo_notice_board + search_url
-# 경영학부
-bus_notice_board = base_url + "/web/business/community/notice_li.jsp"
-bus_notice_link = bus_notice_board + search_url
-
-# 학부목록과 각 학부 웹사이트 연동하는 Dict 생성
-DeptDict = {ame: [ame_notice_board, ame_notice_link], \
-            etc: [etc_notice_board, etc_notice_link], \
-            sof: [sof_notice_board, sof_notice_link], \
-            avs: [avs_notice_board, avs_notice_link], \
-            atl: [atl_notice_board, atl_notice_link], \
-            aeo: [aeo_notice_board, aeo_notice_link], \
-            bus: [bus_notice_board, bus_notice_link]}
 
 @app.route('/sendemail', methods=('GET', 'POST'))
 def sendemail():
@@ -138,55 +168,88 @@ def sendemail():
     requests_toolbelt.adapters.appengine.monkeypatch()
     s = URLSafeSerializer(app.secret_key, salt=Noti_Setting_Token)
 
-    daycount = 0  # 오늘 날짜의 게시물을 가져오기 위해 반드시 0이어야만 함
+    daycount = 0  # 오늘 날짜의 게시물을 가져오기 위해 반드시 0 이어야만 함
 
-    def BoardTextDay(board_url, notice_link):
+    def BoardTextDay(board):
+
+        if board.board_id == dept_board_id:
+            bbsId = board.bbsId
+            siteFlag = board.siteFlag
+
+        board_url = board.board_url
+        notice_link = board.notice_link
+        board_id = board.board_id
+
         try:
-            source_code = requests.get(board_url, timeout=60)
-            plain_text = source_code.text
-            soup = BeautifulSoup(plain_text, 'lxml')
-            if board_url == sof_notice_board:
-                title = soup.find_all('td', {'class': "kboard-list-title"})
-                title = title[1:]  # 처음 제목 줄 제외
-                datetext = soup.find_all('td', {'class': "kboard-list-date"})
-                datetext = datetext[1:]  # 날짜 열 상단의 "작성일"이라는 글자도 가져오므로 첫번째 값은 제외
-                date_format = "%Y.%m.%d"
-            else:
-                title = soup.find_all('td', {'headers': "board_title"})
-                datetext = soup.find_all('td', {'headers': "board_create"})
-                date_format = "%Y-%m-%d"
+            if board_id == main_board_id or board_id == career_board_id:
+                source_code = requests.get(board_url, timeout=60)
+                plain_text = source_code.text
+                soup = BeautifulSoup(plain_text, 'lxml')
 
-            daylst = []
-            for datedata in datetext:
-                datedata = datedata.get_text()
-                try:
-                    datedata = dt.strptime(datedata, date_format)
-                except:
-                    datedata = dt.today()
-                    datedata = datedata.replace(hour=0, minute=0, second=0, microsecond=0)
-                daylst.append(datedata)
-
-            hreflst = []
-            titlelst = []
-            for text in title:
-                if board_url != sof_notice_board:
-                    GetText = text.get('title')
+                if board_id == career_board_id:
+                    title = soup.find_all('li', {'class': "tbody"})
+                    datetext = soup.find_all('span', {'class': "reg_date"})
+                    datetext = datetext[1:]  # 날짜 열 상단의 "등록일" 글자도 가져오므로 첫버째 값은 제
+                    date_format = "%Y-%m-%d"
                 else:
-                    realTitle = text.find_all('div', {'class': 'kboard-avatar-cut-strings'})
-                    for softext in realTitle:
-                        GetText = softext.get_text()
-                        GetText = GetText.strip()  # 공백 지우기
-                titlelst.append(GetText.encode('utf-8'))
-                GetLink = text.find_all('a')
-                for atag in GetLink:
-                    link = atag.get('href')
-                    if board_url != sof_notice_board:
-                        boardID = ''.join(s for s in link if s.isdigit())
+                    title = soup.find_all('td', {'headers': "board_title"})
+                    datetext = soup.find_all('td', {'headers': "board_create"})
+                    date_format = "%Y-%m-%d"
+
+                daylst = []
+                for datedata in datetext:
+                    datedata = datedata.get_text()
+                    try:
+                        datedata = dt.strptime(datedata, date_format)
+                    except:
+                        datedata = dt.today()
+                        datedata = datedata.replace(hour=0, minute=0, second=0, microsecond=0)
+                    daylst.append(datedata)
+
+                hreflst = []
+                titlelst = []
+                for text in title:
+                    if board_id == career_board_id:
+                        GetText = text.find('a').text
                     else:
-                        board_and_ID = ''.join(s for s in link if s.isdigit())
-                        boardID = board_and_ID[3:6]
-                    url = notice_link + boardID
-                    hreflst.append(url)
+                        GetText = text.get('title')
+                    titlelst.append(GetText.encode('utf-8'))
+                    GetLink = text.find_all('a')
+                    for atag in GetLink:
+                        link = atag.get('href')
+                        boardID = ''.join(s for s in link if s.isdigit())
+                        if board_id == career_board_id:
+                            boardID = boardID[1:-1]
+                        url = notice_link + boardID
+                        hreflst.append(url)
+            else:
+                bbsId_str = "bbsId="
+                nttId_str = "&nttId="
+                payload = {"siteFlag": siteFlag, "bbsId": bbsId, "pageIndex": "1", "bbsAuth": "30"}
+                headers = {'Content-Type': 'application/json; charset=utf-8', \
+                           'Host': 'college.kau.ac.kr', \
+                           'Origin': 'http://college.kau.ac.kr', \
+                           'Referer': board_url}
+                source_code = requests.post('http://college.kau.ac.kr/web/bbs/bbsListApi.gen', data=json.dumps(payload),
+                                           headers=headers, timeout=60)
+                plain_text = source_code.text
+                result_data = json.loads(plain_text)
+                datetext = []
+                hreflst = []
+                titlelst = []
+                for data in result_data['resultList']:
+                    titlelst.append(data['nttSj'])
+                    hreflst.append(notice_link + bbsId_str + bbsId + nttId_str + str(data['nttId']))
+                    datetext.append(data['frstRegisterPnttm'])
+                daylst = []
+                date_format = "%Y-%m-%d"
+                for datedata in datetext:
+                    try:
+                        datedata = dt.strptime(datedata, date_format)
+                    except:
+                        datedata = dt.today()
+                        datedata = datedata.replace(hour=0, minute=0, second=0, microsecond=0)
+                    daylst.append(datedata)
 
             html = ""
             for i in range(len(daylst)):
@@ -208,19 +271,17 @@ def sendemail():
     daycal_set = set()
     HomeNewPostDict = {}
     # KAU 공지와 학부공지 글과 날짜가져오기
-    for board in HomeList:
-        text, daycal = BoardTextDay(HomeDict[board][0], HomeDict[board][1])
-        DaycountDict[board] = daycal
-        HomeNewPostDict[board] = text
+    for i in range(len(HomeLst)):
+        text, daycal = BoardTextDay(HomeLst[i])
+        DaycountDict[HomeLst_txt[i]] = daycal
+        HomeNewPostDict[HomeLst_txt[i]] = text
         daycal_set.add(daycal)
 
     DeptNewPostDict = {}
-    for dept in deptlst:
-        text, daycal = BoardTextDay(DeptDict[dept][0], DeptDict[dept][1])
-        DaycountDict[dept] = daycal
-        DeptNewPostDict[dept] = text
-        daycal_set.add(daycal)
-
+    for i in range(len(DeptLst)):
+        text, daycal = BoardTextDay(DeptLst[i])
+        DaycountDict[DeptLst_txt[i]] = daycal
+        DeptNewPostDict[DeptLst_txt[i]] = text
 
     if request.method == 'POST':
         return '잘못된 접근을 시도하고 있습니다.', 404
@@ -235,9 +296,10 @@ def sendemail():
                 footer = '''<div style="margin-top:3pt;margin-bottom:3pt;"><font face="Verdana,Arial,Helvetica,sans-serif" size="1">
                        <span style="font-size:13px;">&nbsp;</span></font></div><br><hr><div style="margin-top:10pt;margin-bottom:14pt;">
                        <font face="Verdana,Arial,Helvetica,sans-serif" size="1">
-                       <span style="font-size:13px;">이제 공지 알리미를 텔레그램에서 만나보세요. 실시간으로 공지사항이 등록되면 알려드립니다.
-                       <a href="https://kau-notify.appspot.com/telegram" target="_blank">한국항공대 공지봇 바로가기</a>
-                        </span>
+                       <span style="font-size:13px;">본 메일은 게시판 알림을 구독하신 분들에게 발송되는 메일입니다.</span>
+                       <br>
+                       <span style="font-size:13px;">게시판 추가/제거및 구독 취소는 
+                       <a href="''' + url + '''" target="_blank"><strong>게시판 설정 페이지 링크</strong></a>에서 하실 수 있습니다.</span>
                        <br>
                        <span style="font-size:13px;">더 많은 학우들이 알림을 받을 수 있도록
                        <a href="https://kau-notify.appspot.com/" target="_blank">구독 신청 페이지</a>
@@ -246,8 +308,9 @@ def sendemail():
                        <span style="font-size:13px;">공지사항 알리미 <a href="https://www.facebook.com/kaunotifier" target="_blank">페이스북 페이지</a>
                         에서 서비스 관련 공지를 확인하실 수 있습니다.</span>
                         <br>
-                        <span style="font-size:13px;">본 메일은 게시판 알림신청 하신분들에게 발송되는 메일이며 알림 관련 설정은
-                       <a href="''' + url + '''" target="_blank">여기</a>서 하실 수 있습니다.</span>
+                        <span style="font-size:13px;">실시간으로 새로운 공지사항을 알려주는 텔레그램 공지봇도 이용해 보세요.
+                       <a href="https://kau-notify.appspot.com/telegram" target="_blank">한국항공대 공지봇 바로가기</a>
+                        </span>
                        <br>
                        <span style="font-size:13px;">기타 문의사항은 <a href="mailto:kaunotifier@gmail.com">kaunotifier@gmail.com</a>
                        으로 연락 바랍니다.</span>

@@ -6,6 +6,7 @@
   js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.7&appId=290629841317791";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+<script> Kakao.init('55249cc0196c444f058b5a84a4ba02d5');</script>
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -25,26 +26,19 @@
         <li><a class="fb-like" data-href="https://www.facebook.com/kaunotifier/" data-width="100" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></a></li>
         <li><a class="fb-share-button" data-href="https://kau-notify.appspot.com/" data-layout="button_count" data-size="small" data-mobile-iframe="true"></a></li>
         <li><a href="/telegram">텔레그램 공지봇</a></li>
-        <li><a id="kakao-link-btn" href="javascript:;">카카오톡으로 공유</a></li>
+        <li><a href="javascript:void(0);" onclick="sendKaKaoLink(); return false;">카카오톡으로 공유하기</a></li>
         <li><a href="/developer">개발자</a></li>
         <script type='text/javascript'>
-          //<![CDATA[
-            // // 사용할 앱의 JavaScript 키를 설정해 주세요.
-            Kakao.init('55249cc0196c444f058b5a84a4ba02d5');
+            function sendKaKaoLink(){
             // // 카카오톡 링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
-            Kakao.Link.createTalkLinkButton({
-              container: '#kakao-link-btn',
-              label: '한국항공대학교 공지사항 새 글을 매일 오후 9시에 알려드립니다.',
-              image: {
-                src: 'https://kau-notify.appspot.com/static/logo.gif',
-                width: '450',
-                height: '400'
-              },
-              webButton: {
-                text: '신청하러 가기',
-                url: 'https://kau-notify.appspot.com/' // 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
-              }
-            });
+          Kakao.Link.sendCustom({
+          templateId: 23912,
+          templateArgs: {
+            'title': '한국항공대 공지 알리미',
+            'description': '매일 오후 9시, 학교 공지사항에 새로운 글이 있으면 이메일로 알려드립니다.'
+          }
+        });
+            }
           //]]>
         </script>
       </ul>

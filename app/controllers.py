@@ -28,7 +28,8 @@ BoardDict = {"General": "일반", \
              "SOF": "소프트웨어학과", \
              "ATL": "항공교통물류학부", \
              "BUS": "경영학부", \
-             "AEO": "항공운항학과"}
+             "AEO": "항공운항학과", \
+             "FRM": "자유전공학부"}
 
 @app.route('/')
 @app.route('/index')
@@ -37,9 +38,10 @@ def index():
     qry= Counter.query()
     for c in qry.fetch(1):
         TotalSubs = c.counter
+    # TotalSubs = 450
     # ----------------------------------------
     # s = URLSafeSerializer(app.secret_key, salt=Noti_Setting_Token)#<---------gitignore시 반드시 삭제할 것!
-    # token = s.dumps('some_email')
+    # token = s.dumps('dummpy_email')
     # url = "http://localhost:8080/notificationSettings/" + token
     # logging.info(url)
     # TotalSubs = len(Subs.query().fetch(keys_only=True)) #This takes too much datastore small ops
@@ -92,8 +94,9 @@ def subscribe():
             atl = "항공교통물류학부"
             bus = "경영학부"
             aeo = "항공운항학과"
+            frm = "자유전공학부"
 
-            deptset = {bus, sof, atl, ame, aeo, avs, etc}
+            deptset = {bus, sof, atl, ame, aeo, avs, etc, frm}
 
             dept = request.form['dept']
             email = request.form['email']
@@ -288,12 +291,10 @@ def set(token):
             window.location= "/";
             </script>'''
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     """Return a custom 404 error."""
     return '앗! 이 주소엔 아무것도 없어요.', 404
-
 
 @app.errorhandler(500)
 def application_error(e):

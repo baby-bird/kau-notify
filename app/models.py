@@ -15,6 +15,8 @@ class Subs(ndb.Expando):
     deptboard = ndb.StructuredProperty(DeptBoard, repeated=True)
     comment = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add = True)
+    first_email_check_date = ndb.DateProperty()
+    second_email_check_date = ndb.DateProperty()
 
 class Counter(ndb.Expando):
     namespace = ndb.StringProperty(indexed=True, required=True)

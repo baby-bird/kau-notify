@@ -6,8 +6,8 @@
 # TODO: Enter your application id below. If you have signed up
 # using cloud.google.com/console use the "project id" for your application
 # id.
-application: kau-notify
-version: 10
+#application: kau-notify
+#version: 10
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -33,6 +33,10 @@ handlers:
 
 - url: /counter
   script: counter.app
+  login: admin
+
+- url: /renew_sub
+  script: renew_sub.app
   login: admin
 
 #- url: /notice_email

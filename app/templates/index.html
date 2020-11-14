@@ -40,7 +40,7 @@
         <li>학사 공지</li>
         <li>학부(과)별 공지(공지 확인 시 <u>로그인</u>이 필요할 수 있습니다.)</li>
       </ul>
-      <p class="lead">*발송되는 메일 하단의 개별 링크를 통해 알림 게시판을 설정 할 수 있습니다.*</p>
+      <p class="lead">*발송되는 메일 하단의 개별 링크를 통해 알림 게시판 추가/제거 설정을 할 수 있습니다.*</p>
         <form name ="contact" action="/subscribe" onsubmit="return validateForm()" method="POST" role="form" class='form-horizontal'>
           <div class="form-group row">
             <div class="col-md-8 col-md-offset-2">
@@ -54,6 +54,7 @@
                 <option value="ATL">항공교통물류학부</option>
                 <option value="AEO">항공운항학과</option>
                 <option value="BUS">경영학부</option>
+                <option value="FRM">자유전공학부</option>
               </select>
               <input name="email" type="text"  placeholder="이메일 (필수) - @kau.kr 이외의 계정 권장"  class="form-control margin-bottom" required/>
               <textarea name="comment" rows="5" placeholder="하고 싶은 말"  class="form-control margin-bottom"></textarea>

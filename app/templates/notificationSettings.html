@@ -200,6 +200,14 @@
               <input type="checkbox" class="board_check" name="dept_board" value="BUS">{% endif %}
               경영학부
           </label>
+          {% if '자유전공학부' in dept %}
+          <label class="btn btn-default active">
+              <input type="checkbox" class="board_check" name="dept_board" value="FRM" checked="">
+              {% else %}
+          <label class="btn btn-default">
+              <input type="checkbox" class="board_check" name="dept_board" value="FRM">{% endif %}
+              자유전공학부
+          </label>
       </div>
       <button type="submit" id="register_submit" class="btn btn-lg btn-primary btn-block needspace">저장 | <span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
 </form>

@@ -22,6 +22,7 @@ urlfetch.set_default_fetch_deadline(60)
 main_board_id = 1
 dept_board_id = 2
 career_board_id = 3
+new_main_board_id = 4 # 일반/학사/장학-대출/행사/모집-채용
 
 BoardDict = {"General": "일반", \
              "Academic": "학사", \
@@ -39,9 +40,10 @@ BoardDict = {"General": "일반", \
              "AEO": "항공운항학과", \
              "FRM": "자유전공학부"}
 
-home_url = "http://kau.ac.kr/page/kauspace"
-search_url = "?search_boardId="
-base_url = "http://www.kau.ac.kr/page"
+old_home_url = "http://old.kau.ac.kr/page/"
+old_search_url = "?search_boardId="
+base_url = "https://www.kau.ac.kr/web/pages"
+search_url = "siteFlag=www&bbsFlag=View&"
 
 # KAU 공지 할당
 gen = "General"
@@ -55,32 +57,32 @@ dor = "Dormitory"
 HomeLst_txt = [gen, aca, sch, job, eve, emp, dor]
 
 # 일반공지
-gen_notice_board = home_url + "/general_list.jsp"
-gen_notice_link = gen_notice_board + search_url
+gen_notice_board = base_url + "/gc32172b.do"
+gen_notice_link = search_url
 
 # 학사공지
-aca_notice_board = home_url + "/academicinfo_list.jsp"
-aca_notice_link = aca_notice_board + search_url
+aca_notice_board = base_url + "/gc14561b.do"
+aca_notice_link = search_url
 
 # 장학/대출공지
-sch_notice_board = home_url + "/scholarship_list.jsp"
-sch_notice_link = sch_notice_board + search_url
+sch_notice_board = base_url + "/gc73650b.do"
+sch_notice_link = search_url
 
 # 대학일자리센터 공지사항
 job_notice_board = "http://career.kau.ac.kr/ko/community/notice2"
 job_notice_link = job_notice_board + "/view/"
 
 # 행사공지
-eve_notice_board = home_url + "/event_list.jsp"
-eve_notice_link = eve_notice_board + search_url
+eve_notice_board = base_url + "/gc29925b.do"
+eve_notice_link = search_url
 
 # 모집/채용공지
-emp_notice_board = home_url + "/employment_list.jsp"
-emp_notice_link = emp_notice_board + search_url
+emp_notice_board = base_url + "/gc3256b.do"
+emp_notice_link = search_url
 
 # 생활관
-dor_notice_board = base_url + "/web/life/community/notice_li.jsp"
-dor_notice_link = dor_notice_board + search_url
+dor_notice_board = old_home_url + "/web/life/community/notice_li.jsp"
+dor_notice_link = dor_notice_board + old_search_url
 
 class Home:
   def __init__(self, board_url, notice_link, main_board_id):
@@ -89,43 +91,37 @@ class Home:
     self.board_id = main_board_id
 
 # 대문 공지록과 각 공지 주소 연동하는 Instance 생성
-gen = Home(gen_notice_board, gen_notice_link, main_board_id)
-aca = Home(aca_notice_board, aca_notice_link, main_board_id)
-sch = Home(sch_notice_board, sch_notice_link, main_board_id)
-job = Home(job_notice_board, job_notice_link, career_board_id)
-eve = Home(eve_notice_board, eve_notice_link, main_board_id)
-emp = Home(emp_notice_board, emp_notice_link, main_board_id)
-dor = Home(dor_notice_board, dor_notice_link, main_board_id)
 
-HomeLst = [gen, aca, sch, job, eve, emp, dor]
+job = Home(job_notice_board, job_notice_link, career_board_id)
+dor = Home(dor_notice_board, dor_notice_link, main_board_id)
 
 
 base_url = "http://college.kau.ac.kr/web/pages"
 
 # 항우기
 ame_notice_board = base_url + "/gc1986b.do"
-ame_notice_link = ame_notice_board + "?siteFlag=am_www&bbsFlag=View&"
+ame_notice_link = "?siteFlag=am_www&bbsFlag=View&"
 # 항전정
 etc_notice_board = base_url + "/gc23761b.do"
-etc_notice_link = etc_notice_board + "?siteFlag=eie_www&bbsFlag=View&"
+etc_notice_link = "?siteFlag=eie_www&bbsFlag=View&"
 # 소프트웨어학과
 sof_notice_board = base_url + "/gc911b.do"
-sof_notice_link = sof_notice_board + "?siteFlag=sw_www&bbsFlag=View&"
+sof_notice_link = "?siteFlag=sw_www&bbsFlag=View&"
 # 재료공학과
 avs_notice_board = base_url + "/gc46806b.do"
-avs_notice_link = avs_notice_board + "?siteFlag=materials_www&bbsFlag=View&"
+avs_notice_link = "?siteFlag=materials_www&bbsFlag=View&"
 # 항공교통물류학부
 atl_notice_board = base_url + "/gc93464b.do"
-atl_notice_link = atl_notice_board + "?siteFlag=attll_www&bbsFlag=View&"
+atl_notice_link = "?siteFlag=attll_www&bbsFlag=View&"
 # 항공운항학과
 aeo_notice_board = base_url + "/gc61682b.do"
-aeo_notice_link = aeo_notice_board + "?siteFlag=hw_www&bbsFlag=View&"
+aeo_notice_link = "?siteFlag=hw_www&bbsFlag=View&"
 # 경영학부
 bus_notice_board = base_url + "/gc25685b.do"
-bus_notice_link = bus_notice_board + "?siteFlag=biz_www&bbsFlag=View&"
+bus_notice_link = "?siteFlag=biz_www&bbsFlag=View&"
 # 자유전공학부
 frm_notice_board = base_url + "/gc46051b.do"
-frm_notice_link = frm_notice_board + "?siteFlag=free_www&bbsFlag=View&"
+frm_notice_link = "?siteFlag=free_www&bbsFlag=View&"
 
 class Dept:
   def __init__(self, board_url, notice_link, dept_board_id, bbsId, siteFlag):
@@ -134,6 +130,12 @@ class Dept:
     self.board_id = dept_board_id
     self.bbsId = bbsId
     self.siteFlag = siteFlag
+
+gen = Dept(gen_notice_board, gen_notice_link, new_main_board_id, '0119', 'www')
+aca = Dept(aca_notice_board, aca_notice_link, new_main_board_id, '0120', 'www')
+sch = Dept(sch_notice_board, sch_notice_link, new_main_board_id, '0121', 'www')
+eve = Dept(eve_notice_board, eve_notice_link, new_main_board_id, '0122', 'www')
+emp = Dept(emp_notice_board, emp_notice_link, new_main_board_id, '0124', 'www')
 
 # 학부목록과 각 학부 웹사이트 연동하는 Instance 생성
 ame = Dept(ame_notice_board, ame_notice_link, dept_board_id, '0024', 'am_www')
@@ -145,6 +147,7 @@ aeo = Dept(aeo_notice_board, aeo_notice_link, dept_board_id, '0003', 'hw_www')
 bus = Dept(bus_notice_board, bus_notice_link, dept_board_id, '0056', 'biz_www')
 frm = Dept(frm_notice_board, frm_notice_link, dept_board_id, '0072', 'free_www')
 
+HomeLst = [gen, aca, sch, job, eve, emp, dor]
 DeptLst = [bus, sof, atl, ame, aeo, avs, etc, frm]
 
 # 학부 공지 텍스트 할당
@@ -172,9 +175,10 @@ def sendemail():
 
     def BoardTextDay(board):
 
-        if board.board_id == dept_board_id:
+        if board.board_id == dept_board_id or board.board_id == new_main_board_id:
             bbsId = board.bbsId
             siteFlag = board.siteFlag
+            notice_link = board.notice_link
 
         board_url = board.board_url
         notice_link = board.notice_link
@@ -213,7 +217,9 @@ def sendemail():
                         GetText = text.find('a').text
                     else:
                         GetText = text.get('title')
+
                     titlelst.append(GetText.encode('utf-8'))
+
                     GetLink = text.find_all('a')
                     for atag in GetLink:
                         link = atag.get('href')
@@ -225,13 +231,24 @@ def sendemail():
             else:
                 bbsId_str = "bbsId="
                 nttId_str = "&nttId="
+                bbsAuth_str = "?bbsAuth=30&"
                 payload = {"siteFlag": siteFlag, "bbsId": bbsId, "pageIndex": "1", "bbsAuth": "30"}
-                headers = {'Content-Type': 'application/json; charset=utf-8', \
-                           'Host': 'college.kau.ac.kr', \
-                           'Origin': 'http://college.kau.ac.kr', \
-                           'Referer': board_url}
-                source_code = requests.post('http://college.kau.ac.kr/web/bbs/bbsListApi.gen', data=json.dumps(payload),
-                                           headers=headers, timeout=60)
+                if board_id == dept_board_id:
+                    headers = {'Content-Type': 'application/json; charset=utf-8', \
+                               'Host': 'college.kau.ac.kr', \
+                               'Origin': 'http://college.kau.ac.kr', \
+                               'Referer': board_url}
+                    source_code = requests.post('http://college.kau.ac.kr/web/bbs/bbsListApi.gen',
+                                                data=json.dumps(payload),
+                                                headers=headers, timeout=60)
+                else:
+                    headers = {'Content-Type': 'application/json; charset=utf-8', \
+                               'Host': 'www.kau.ac.kr', \
+                               'Origin': 'https://www.kau.ac.kr', \
+                               'Referer': board_url}
+                    source_code = requests.post('https://www.kau.ac.kr/web/bbs/bbsListApi.gen',
+                                                data=json.dumps(payload),
+                                                headers=headers, timeout=60)
                 plain_text = source_code.text
                 result_data = json.loads(plain_text)
                 datetext = []
@@ -239,7 +256,8 @@ def sendemail():
                 titlelst = []
                 for data in result_data['resultList']:
                     titlelst.append(data['nttSj'])
-                    hreflst.append(notice_link + bbsId_str + bbsId + nttId_str + str(data['nttId']))
+                    hreflst.append(
+                        board_url + bbsAuth_str + notice_link + bbsId_str + bbsId + nttId_str + str(data['nttId']))
                     datetext.append(data['frstRegisterPnttm'])
                 daylst = []
                 date_format = "%Y-%m-%d"
@@ -254,9 +272,14 @@ def sendemail():
             html = ""
             for i in range(len(daylst)):
                 if (d - daylst[i]).days == daycount:
-                    r = re.compile(r"(http://[^ ]+)").sub(
-                        r'<b>· </b><a href="\1" target="_blank">' + titlelst[i] + '</a><br>',
-                        hreflst[i])
+                    if board.board_id == new_main_board_id:
+                        r = re.compile(r"(https://[^ ]+)").sub(
+                            r'<b>· </b><a href="\1" target="_blank">' + titlelst[i] + '</a><br>',
+                            hreflst[i])
+                    else:
+                        r = re.compile(r"(http://[^ ]+)").sub(
+                            r'<b>· </b><a href="\1" target="_blank">' + titlelst[i] + '</a><br>',
+                            hreflst[i])
                     html += r
             daycal = (d - max(daylst)).days
             return html, daycal

@@ -38,12 +38,15 @@ def index():
     qry= Counter.query()
     for c in qry.fetch(1):
         TotalSubs = c.counter
-    # TotalSubs = 450
     # ----------------------------------------
+    # Uncomment Below for Testing
+    # TotalSubs = 450
     # s = URLSafeSerializer(app.secret_key, salt=Noti_Setting_Token)#<---------gitignore시 반드시 삭제할 것!
-    # token = s.dumps('dummpy_email')
+    # token = s.dumps('sukhoi380@gmail.com')
     # url = "http://localhost:8080/notificationSettings/" + token
     # logging.info(url)
+
+    # Deprecated code below
     # TotalSubs = len(Subs.query().fetch(keys_only=True)) #This takes too much datastore small ops
     # TotalSubs = memcache.get(key="TotalSubs")
     return render_template('index.html', total_subscribers=TotalSubs)

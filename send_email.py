@@ -100,28 +100,28 @@ base_url = "http://college.kau.ac.kr/web/pages"
 
 # 항우기
 ame_notice_board = base_url + "/gc1986b.do"
-ame_notice_link = "?siteFlag=am_www&bbsFlag=View&"
+ame_notice_link = "siteFlag=am_www&bbsFlag=View&"
 # 항전정
 etc_notice_board = base_url + "/gc23761b.do"
-etc_notice_link = "?siteFlag=eie_www&bbsFlag=View&"
+etc_notice_link = "siteFlag=eie_www&bbsFlag=View&"
 # 소프트웨어학과
 sof_notice_board = base_url + "/gc911b.do"
-sof_notice_link = "?siteFlag=sw_www&bbsFlag=View&"
+sof_notice_link = "siteFlag=sw_www&bbsFlag=View&"
 # 재료공학과
 avs_notice_board = base_url + "/gc46806b.do"
-avs_notice_link = "?siteFlag=materials_www&bbsFlag=View&"
+avs_notice_link = "siteFlag=materials_www&bbsFlag=View&"
 # 항공교통물류학부
 atl_notice_board = base_url + "/gc93464b.do"
-atl_notice_link = "?siteFlag=attll_www&bbsFlag=View&"
+atl_notice_link = "siteFlag=attll_www&bbsFlag=View&"
 # 항공운항학과
 aeo_notice_board = base_url + "/gc61682b.do"
-aeo_notice_link = "?siteFlag=hw_www&bbsFlag=View&"
+aeo_notice_link = "siteFlag=hw_www&bbsFlag=View&"
 # 경영학부
 bus_notice_board = base_url + "/gc25685b.do"
-bus_notice_link = "?siteFlag=biz_www&bbsFlag=View&"
+bus_notice_link = "siteFlag=biz_www&bbsFlag=View&"
 # 자유전공학부
 frm_notice_board = base_url + "/gc46051b.do"
-frm_notice_link = "?siteFlag=free_www&bbsFlag=View&"
+frm_notice_link = "siteFlag=free_www&bbsFlag=View&"
 
 class Dept:
   def __init__(self, board_url, notice_link, dept_board_id, bbsId, siteFlag):

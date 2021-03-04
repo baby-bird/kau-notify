@@ -69,7 +69,7 @@ sch_notice_board = base_url + "/gc73650b.do"
 sch_notice_link = search_url
 
 # 대학일자리센터 공지사항
-job_notice_board = "http://career.kau.ac.kr/ko/community/notice2"
+job_notice_board = "https://career.kau.ac.kr/ko/community/notice2"
 job_notice_link = job_notice_board + "/view/"
 
 # 행사공지
@@ -272,7 +272,7 @@ def sendemail():
             html = ""
             for i in range(len(daylst)):
                 if (d - daylst[i]).days == daycount:
-                    if board.board_id == new_main_board_id:
+                    if board.board_id == new_main_board_id or board.board_id == career_board_id:
                         r = re.compile(r"(https://[^ ]+)").sub(
                             r'<b>· </b><a href="\1" target="_blank">' + titlelst[i] + '</a><br>',
                             hreflst[i])

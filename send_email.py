@@ -174,7 +174,6 @@ def sendemail():
     daycount = 0  # 오늘 날짜의 게시물을 가져오기 위해 반드시 0 이어야만 함
 
     def BoardTextDay(board):
-
         if board.board_id == dept_board_id or board.board_id == new_main_board_id:
             bbsId = board.bbsId
             siteFlag = board.siteFlag
@@ -228,6 +227,41 @@ def sendemail():
                             boardID = boardID[1:-1]
                         url = notice_link + boardID
                         hreflst.append(url)
+            elif bbsId == '0119' or bbsId == '0120':
+                bbsId_str = "bbsId="
+                nttId_str = "&nttId="
+                bbsAuth_str = "?bbsAuth=30&"
+                page_idx = [1, 2]
+                datetext = []
+                hreflst = []
+                titlelst = []
+                daylst = []
+                for i in page_idx:
+                    payload = {"siteFlag": siteFlag, "bbsId": bbsId, "pageIndex": str(i), "bbsAuth": "30"}
+                    headers = {'Content-Type': 'application/json; charset=utf-8', \
+                               'Host': 'www.kau.ac.kr', \
+                               'Origin': 'https://www.kau.ac.kr', \
+                               'Referer': board_url}
+                    source_code = requests.post('https://www.kau.ac.kr/web/bbs/bbsListApi.gen',
+                                                data=json.dumps(payload),
+                                                headers=headers, timeout=60)
+                    plain_text = source_code.text
+                    result_data = json.loads(plain_text)
+
+                    for data in result_data['resultList']:
+                        titlelst.append(data['nttSj'])
+                        hreflst.append(
+                            board_url + bbsAuth_str + notice_link + bbsId_str + bbsId + nttId_str + str(data['nttId']))
+                        datetext.append(data['frstRegisterPnttm'])
+
+                date_format = "%Y-%m-%d"
+                for datedata in datetext:
+                    try:
+                        datedata = dt.strptime(datedata, date_format)
+                    except:
+                        datedata = dt.today()
+                        datedata = datedata.replace(hour=0, minute=0, second=0, microsecond=0)
+                    daylst.append(datedata)
             else:
                 bbsId_str = "bbsId="
                 nttId_str = "&nttId="
